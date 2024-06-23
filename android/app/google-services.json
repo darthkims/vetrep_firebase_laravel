@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970023261958",
+    "project_id": "vetrep-2ed5f",
+    "storage_bucket": "vetrep-2ed5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970023261958:android:9fbeffb4fc0d2278257087",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL5sISLT7CcGCKVBce21QguQeej8Aipp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
