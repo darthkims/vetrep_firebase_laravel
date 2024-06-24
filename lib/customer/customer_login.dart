@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../authentication.dart';
 import 'customer_home.dart';
-import '../signup.dart';
+import 'signup.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -21,7 +21,7 @@ class Login extends StatelessWidget {
                 height: 200,
               ),
               Text(
-                'Ready to Rep until Fit?',
+                'Meet The Vet, Treat Your Pet',
                 style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ],
@@ -45,7 +45,7 @@ class Login extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
               GestureDetector(
                 onTap: () {
-                  // Navigator.pushNamed(context, '/signup');
+
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Signup()));
                 },
@@ -88,6 +88,8 @@ class _LoginFormState extends State<LoginForm> {
           TextFormField(
             // initialValue: 'Input text',
             decoration: InputDecoration(
+              fillColor: Color(0xff517954),
+              filled: true,
               prefixIcon: Icon(Icons.email_outlined, color: Colors.white),
               labelText: 'Email',
               labelStyle: TextStyle(color: Colors.white), // Set the label text color
@@ -108,15 +110,12 @@ class _LoginFormState extends State<LoginForm> {
               email = val;
             },
           ),
-
-          SizedBox(
-            height: 20,
-          ),
-
-          // password
+          SizedBox(height: 20),
           TextFormField(
             // initialValue: 'Input text',
             decoration: InputDecoration(
+              fillColor: Color(0xff517954),
+              filled: true,
               labelText: 'Password',
               labelStyle: TextStyle(color: Colors.white), // Set the label text color
               prefixIcon: Icon(Icons.lock_outline, color: Colors.white),
@@ -151,10 +150,7 @@ class _LoginFormState extends State<LoginForm> {
 
           SizedBox(height: 30),
 
-          SizedBox(
-            height: 54,
-            width: 184,
-            child: ElevatedButton(
+          ElevatedButton(
               onPressed: () {
                 // Respond to button press
 
@@ -183,10 +179,9 @@ class _LoginFormState extends State<LoginForm> {
                       borderRadius: BorderRadius.all(Radius.circular(24.0)))),
               child: Text(
                 'Login',
-                style: TextStyle(fontSize: 24),
+                // style: TextStyle(fontSize: 20),
               ),
             ),
-          ),
         ],
       ),
     );

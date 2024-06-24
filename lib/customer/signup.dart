@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vetrep/authentication.dart';
 import 'package:vetrep/customer/customer_home.dart';
+import 'package:vetrep/customer/customer_login.dart';
 
 class Signup extends StatelessWidget {
   @override
@@ -24,10 +25,10 @@ class Signup extends StatelessWidget {
           ),
           Center(
             child: Text(
-              'Your Pet My Pet',
+              'Meet The Vet, Treat Your Pet',
               style: TextStyle(fontSize: 24,
                   color: Colors.white,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.bold,),
             ),
           ),
 
@@ -39,8 +40,7 @@ class Signup extends StatelessWidget {
             child: SignupForm(),
           ),
 
-          Expanded(
-            child: Column(
+            Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Row(
@@ -54,9 +54,8 @@ class Signup extends StatelessWidget {
                             color: Colors.white)),
                     GestureDetector(
                       onTap: () {
-                        // // Navigator.pushNamed(context, '/signup');
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) => Login()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
                       },
                       child: Text(' Login here',
                           style: TextStyle(fontSize: 20, color: Colors.blue)),
@@ -65,7 +64,6 @@ class Signup extends StatelessWidget {
                 )
               ],
             ),
-          ),
         ],
       ),
     );
@@ -105,9 +103,10 @@ class _SignupFormState extends State<SignupForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          // email
           TextFormField(
             decoration: InputDecoration(
+                fillColor: Color(0xff517954),
+                filled: true,
                 prefixIcon: Icon(Icons.email_outlined, color: Colors.white),
                 labelText: 'Email',
                 labelStyle: TextStyle(color: Colors.white), // Set the label text color
@@ -132,6 +131,8 @@ class _SignupFormState extends State<SignupForm> {
           TextFormField(
             controller: pass,
             decoration: InputDecoration(
+              fillColor: Color(0xff517954),
+              filled: true,
               labelText: 'Password',
               labelStyle: TextStyle(color: Colors.white), // Set the label text color
               prefixIcon: Icon(Icons.lock_outline, color: Colors.white),
@@ -165,6 +166,8 @@ class _SignupFormState extends State<SignupForm> {
           // confirm passwords
           TextFormField(
             decoration: InputDecoration(
+              fillColor: Color(0xff517954),
+              filled: true,
               labelText: 'Confirm Password',
               labelStyle: TextStyle(color: Colors.white), // Set the label text color
               prefixIcon: Icon(Icons.lock_outline, color: Colors.white),
@@ -184,6 +187,8 @@ class _SignupFormState extends State<SignupForm> {
           // name
           TextFormField(
             decoration: InputDecoration(
+              fillColor: Color(0xff517954),
+              filled: true,
               labelText: 'Full name',
               labelStyle: TextStyle(color: Colors.white), // Set the label text color
               prefixIcon: Icon(Icons.account_circle, color: Colors.white),
@@ -201,16 +206,8 @@ class _SignupFormState extends State<SignupForm> {
               return null;
             },
           ),
-
-          SizedBox(
-            height: 30,
-          ),
-
-          // signUP button
-          SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: ElevatedButton(
+          SizedBox(height: 30,),
+          ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
@@ -237,10 +234,8 @@ class _SignupFormState extends State<SignupForm> {
                       borderRadius: BorderRadius.all(Radius.circular(24.0)))),
               child: Text(
                 'Sign Up',
-                style: TextStyle(fontSize: 24),
               ),
             ),
-          ),
         ],
       ),
     );

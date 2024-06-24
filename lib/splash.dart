@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vetrep/admin/admin_login.dart';
 import 'package:vetrep/customer/customer_login.dart';
-import 'package:vetrep/signup.dart';
+import 'package:vetrep/customer/signup.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -52,7 +52,7 @@ class SplashScreen extends StatelessWidget {
                           SimpleDialogOption(
                             onPressed: () {
                               Navigator.pop(context);
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => Login()),
                               );
@@ -64,7 +64,8 @@ class SplashScreen extends StatelessWidget {
                           ),
                           SimpleDialogOption(
                             onPressed: () {
-                              Navigator.pushReplacement(
+                              Navigator.pop(context);
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => AdminLogin())
                               );
@@ -85,7 +86,7 @@ class SplashScreen extends StatelessWidget {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Signup()
                     )
