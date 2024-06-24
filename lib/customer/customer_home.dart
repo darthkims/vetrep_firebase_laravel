@@ -39,7 +39,15 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.network("https://media.tenor.com/-dM-IPQYv_MAAAAM/antony-antony-substitute.gif",),
+            Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLKQAA8zurKr57uEztdBJPgXopAwWGoUCXFQ&s")
+          ],
+        ),
       ),
       bottomNavigationBar: Navbar(currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
     );

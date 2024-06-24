@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vetrep/customer/customer_home.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
@@ -38,11 +39,26 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String displayName = user?.displayName ?? 'User';
+    String email = user?.email ?? 'Email';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
+      ),
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(displayName),
+            Text(email),
+            Image.network("https://media.tenor.com/l4k1hzxDnNYAAAAM/jamal-abdillah-jamal-abdillah-rolled.gif"),
+            Image.network("https://www.icegif.com/wp-content/uploads/2023/01/icegif-162.gif")
+          ],
+        ),
       ),
       bottomNavigationBar: Navbar(currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
     );
