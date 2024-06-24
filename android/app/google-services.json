@@ -9,7 +9,26 @@
       "client_info": {
         "mobilesdk_app_id": "1:970023261958:android:9fbeffb4fc0d2278257087",
         "android_client_info": {
-          "package_name": "com.example.app"
+          "package_name": "com.example.vetrep"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL5sISLT7CcGCKVBce21QguQeej8Aipp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970023261958:android:2ed038054dcdf571257087",
+        "android_client_info": {
+          "package_name": "com.example.vetrep"
         }
       },
       "oauth_client": [],
