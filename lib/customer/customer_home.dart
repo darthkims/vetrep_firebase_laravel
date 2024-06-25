@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vetrep/customer/customer_appointment_list.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 import 'package:vetrep/customer/customer_profile.dart';
 
@@ -24,7 +25,10 @@ class _HomeState extends State<Home> {
 
           break;
         case 3:
-
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CustomerAppointmentList())
+          );
           break;
         case 4:
           Navigator.push(
