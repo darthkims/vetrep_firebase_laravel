@@ -48,7 +48,7 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
               GestureDetector(
@@ -110,7 +110,9 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                                     )
                                 ),
                               ),
-                              Text("Name: Meow", style: TextStyle(fontSize: 20),),
+                              Divider(),
+                              Text("Name:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                              Text("Meow", style: TextStyle(fontSize: 25),),
                               SizedBox(height: 10),
                               // Add more content here as needed
                             ],
@@ -127,7 +129,7 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                     borderRadius: BorderRadius.circular(10.0),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
+                        color: Colors.grey.withOpacity(1),
                         spreadRadius: 1,
                         blurRadius: 5,
                         offset: const Offset(0, 3),
@@ -145,7 +147,7 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                           children: [
                             Text(
                               '5 June 2024',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),
                             ),
                             SizedBox(height: 5),
                             Text(
@@ -164,16 +166,23 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                                   'Clinics: Klinik Haiwan Jasin',
                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                                 ),
-                                IconButton(
-                                    onPressed: () {
-                                      final scaffoldMessenger = ScaffoldMessenger.of(context);
-                                      scaffoldMessenger.showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Location Clicked'),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(Icons.location_on)
+                                SizedBox(width: 10,),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        final scaffoldMessenger = ScaffoldMessenger.of(context);
+                                        scaffoldMessenger.showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Location Clicked'),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(Icons.location_on)
+                                  ),
                                 )
                               ],
                             ),
@@ -198,20 +207,14 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                         ),
                       ),
                       Positioned(
-                        top: 70, // Adjust the top position as needed
+                        top: 60, // Adjust the top position as needed
                         right: 30,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(
+                        child: Icon(
                             Icons.male, // Example: replace with your gender icon
-                            size: 50,
+                            size: 60,
                             color: Colors.blue, // Example: customize the icon color
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
