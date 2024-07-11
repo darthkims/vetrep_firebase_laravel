@@ -3,6 +3,8 @@ import 'package:vetrep/customer/customer_appointment_list.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 import 'package:vetrep/customer/customer_profile.dart';
 
+import 'customer_book_appointment.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -22,6 +24,10 @@ class _HomeState extends State<Home> {
 
           break;
         case 2:
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Book())
+          );
 
           break;
         case 3:

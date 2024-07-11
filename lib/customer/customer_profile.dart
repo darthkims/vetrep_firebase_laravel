@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vetrep/customer/customer_appointment_list.dart';
+import 'package:vetrep/customer/customer_book_appointment.dart';
 import 'package:vetrep/customer/customer_home.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 
@@ -27,6 +28,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
         break;
       case 2:
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Book())
+        );
 
         break;
       case 3:
