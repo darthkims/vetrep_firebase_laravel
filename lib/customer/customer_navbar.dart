@@ -41,11 +41,6 @@ class Navbar extends StatelessWidget {
             label: 'Book Now', // Empty label for a cleaner look (optional)
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.list_alt_outlined, size: 30, color: Colors.green,),
-            icon: Icon(Icons.list_alt, color: Colors.green, size: 30,),
-            label: 'View My Appointment',
-          ),
-          NavigationDestination(
             selectedIcon: Icon(Icons.account_circle_outlined, size: 30, color: Colors.green,),
             icon: Icon(Icons.account_circle, color: Colors.green, size: 30,),
             label: 'Profile', // Empty label for a cleaner look (optional)

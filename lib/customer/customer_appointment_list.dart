@@ -14,46 +14,12 @@ class CustomerAppointmentList extends StatefulWidget {
 }
 
 class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
-  final int currentPageIndex = 3;
 
-  void onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Home())
-        );
-        break;
-      case 1:
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SearchPage())
-        );
-        break;
-      case 2:
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Book())
-        );
-
-        break;
-      case 3:
-
-        break;
-      case 4:
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage())
-        );
-        break;
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("My Appointment"),
-        automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
@@ -233,7 +199,6 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
           ),
         ),
       ),
-      bottomNavigationBar: Navbar(currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
     );
   }
 }

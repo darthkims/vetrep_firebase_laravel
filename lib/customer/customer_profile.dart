@@ -14,7 +14,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final int currentPageIndex = 4;
+  final int currentPageIndex = 3;
 
   void onItemTapped(int index) {
     switch (index) {
@@ -39,12 +39,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
         break;
       case 3:
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CustomerAppointmentList())
-        );
-        break;
-      case 4:
 
         break;
     }
@@ -68,8 +62,14 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Container(
                 child: Text("Welcome $displayName", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
-            Text(email),
-
+            const Divider(), // Add a divider between menu items
+            ListTile(
+              title: const Text('Appointment List'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerAppointmentList()));
+              },
+            ),
+            const Divider(), // Add a divider between menu items
           ],
         ),
       ),
