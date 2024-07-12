@@ -4,6 +4,7 @@ import 'package:vetrep/customer/customer_appointment_list.dart';
 import 'package:vetrep/customer/customer_book_appointment.dart';
 import 'package:vetrep/customer/customer_home.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
+import 'package:vetrep/customer/search.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -25,7 +26,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
         break;
       case 1:
-
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchPage())
+        );
         break;
       case 2:
         Navigator.push(

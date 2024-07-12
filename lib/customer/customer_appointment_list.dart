@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vetrep/customer/customer_home.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 import 'package:vetrep/customer/customer_profile.dart';
+import 'package:vetrep/customer/search.dart';
 
 import 'customer_book_appointment.dart';
 
@@ -24,7 +25,10 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
         );
         break;
       case 1:
-
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchPage())
+        );
         break;
       case 2:
         Navigator.push(

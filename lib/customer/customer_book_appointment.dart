@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vetrep/customer/customer_appointment_list.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 import 'package:vetrep/customer/customer_profile.dart';
+import 'package:vetrep/customer/search.dart';
 import 'customer_home.dart';
 
 void main() {
@@ -40,7 +41,10 @@ class _BookState extends State<Book> {
         );
         break;
       case 1:
-      // Add navigation for the second tab if needed
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchPage())
+        );
         break;
       case 2:
       // Current page, no navigation needed
