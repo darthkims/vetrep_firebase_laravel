@@ -22,12 +22,16 @@ class _SearchPageState extends State<SearchPage> {
   List<Marker> _displayedMarkers = [];
   LatLng? _currentLocation;
   TextEditingController _searchController = TextEditingController();
+  List<String> _clinicNames = [];
+  List<String> _filteredClinicNames = [];
+  bool _showSuggestions = false;
 
   @override
   void initState() {
     super.initState();
     _setMarkers();
     _getCurrentLocation();
+    _clinicNames = _allMarkers.map((marker) => marker.infoWindow.title!).toList();
   }
 
   void _setMarkers() {
@@ -115,13 +119,40 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void _filterMarkers(String query) {
-    List<Marker> filteredMarkers = _allMarkers
-        .where((marker) =>
-        marker.infoWindow.title!.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+  void _filterClinicNames(String query) {
+    List<String> filteredNames = [];
+
+    if (query.isNotEmpty) {
+      filteredNames = _clinicNames
+          .where((name) =>
+          name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      setState(() {
+        _filteredClinicNames = filteredNames;
+        _showSuggestions = true;
+      });
+    } else {
+      setState(() {
+        _filteredClinicNames.clear();
+        _showSuggestions = false;
+      });
+    }
+  }
+
+  void _navigateToClinicLocation(String clinicName) {
+    Marker selectedMarker = _allMarkers.firstWhere(
+          (marker) => marker.infoWindow.title == clinicName,
+      orElse: () => _allMarkers.first,
+    );
+
+    mapController.animateCamera(
+      CameraUpdate.newLatLngZoom(selectedMarker.position, 50.0), // Zoom to 50.0
+    );
+
+    // Hide the list of suggestions
     setState(() {
-      _displayedMarkers = filteredMarkers;
+      _showSuggestions = false;
+      _searchController.clear(); // Optionally clear the search input
     });
   }
 
@@ -133,29 +164,59 @@ class _SearchPageState extends State<SearchPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
       ),
-      body: Stack(
+      body: Column(
         children: [
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 11.0,
-            ),
-            markers: Set<Marker>.of(_displayedMarkers),
-          ),
-          Positioned(
-            bottom: 16.0,
-            left: 16.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                _goToCurrentLocation();
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search Vet Clinics',
+                suffixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              onChanged: (value) {
+                _filterClinicNames(value);
               },
-              tooltip: 'Go to Current Location',
-              child: Icon(Icons.my_location),
-              backgroundColor: Colors.green,
+            ),
+          ),
+          if (_showSuggestions && _filteredClinicNames.isNotEmpty)
+            Expanded(
+              flex: 3,
+              child: ListView.builder(
+                itemCount: _filteredClinicNames.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_filteredClinicNames[index]),
+                    onTap: () {
+                      _navigateToClinicLocation(_filteredClinicNames[index]);
+                    },
+                  );
+                },
+              ),
+            ),
+          Expanded(
+            flex: _showSuggestions && _filteredClinicNames.isNotEmpty ? 7 : 10,
+            child: GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 11.0,
+              ),
+              markers: Set<Marker>.of(_displayedMarkers),
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _goToCurrentLocation();
+        },
+        tooltip: 'Go to Current Location',
+        child: Icon(Icons.my_location),
+        backgroundColor: Colors.green,
       ),
       bottomNavigationBar: Navbar(
           currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
