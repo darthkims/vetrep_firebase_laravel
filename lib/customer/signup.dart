@@ -83,11 +83,12 @@ class _SignupFormState extends State<SignupForm> {
   String? email;
   String? password;
   String? name;
+  String? phoneNum;
   bool _obscureText = false;
 
   bool agree = false;
 
-  final pass = new TextEditingController();
+  final pass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -206,6 +207,29 @@ class _SignupFormState extends State<SignupForm> {
               return null;
             },
           ),
+          space,
+          // name
+          TextFormField(
+            decoration: InputDecoration(
+              fillColor: Color(0xff517954),
+              filled: true,
+              labelText: 'Phone Number',
+              labelStyle: TextStyle(color: Colors.white), // Set the label text color
+              prefixIcon: Icon(Icons.phone, color: Colors.white),
+              border: border,
+            ),
+            style: TextStyle(color: Colors.white), // Set the input text color
+
+            onSaved: (val) {
+              phoneNum = val;
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter phone number';
+              }
+              return null;
+            },
+          ),
           SizedBox(height: 30,),
           ElevatedButton(
               onPressed: () {
@@ -213,7 +237,7 @@ class _SignupFormState extends State<SignupForm> {
                   _formKey.currentState!.save();
 
                   AuthenticationHelper()
-                      .signUp(email: email!, password: password!, name: name!)
+                      .signUp(email: email!, password: password!, name: name!, phoneNum: phoneNum!)
                       .then((result) {
                     if (result == null) {
                       Navigator.pushReplacement(context,

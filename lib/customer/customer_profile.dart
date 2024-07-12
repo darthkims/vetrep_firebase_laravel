@@ -62,10 +62,9 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            Text(displayName),
+            Container(
+                child: Text("Welcome $displayName", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
             Text(email),
-            Image.network("https://media.tenor.com/l4k1hzxDnNYAAAAM/jamal-abdillah-jamal-abdillah-rolled.gif"),
-            Image.network("https://www.icegif.com/wp-content/uploads/2023/01/icegif-162.gif"),
 
           ],
         ),

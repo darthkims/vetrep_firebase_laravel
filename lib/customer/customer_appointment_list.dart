@@ -169,8 +169,8 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                             Row(
                               children: [
                                 Text(
-                                  'Clinics: Klinik Haiwan Jasin',
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                                  'Klinik Haiwan Jasin',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                 ),
                                 SizedBox(width: 10,),
                                 Container(
