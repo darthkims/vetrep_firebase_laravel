@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vetrep/customer/customer_appointment_list.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 import 'customer_book_appointment.dart';
 import 'customer_home.dart';
 import 'customer_profile.dart';
-
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -15,6 +15,13 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final int currentPageIndex = 1;
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   void onItemTapped(int index) {
     switch (index) {
@@ -25,7 +32,6 @@ class _SearchPageState extends State<SearchPage> {
         );
         break;
       case 1:
-
         break;
       case 2:
         Navigator.push(
@@ -45,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
         break;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +59,13 @@ class _SearchPageState extends State<SearchPage> {
         title: Text('Search For Vet Clinic Around You'),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
+      ),
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 11.0,
+        ),
       ),
       bottomNavigationBar: Navbar(
           currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
