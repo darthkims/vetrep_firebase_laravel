@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
 import 'package:vetrep/customer/customer_appointment_list.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 import 'customer_book_appointment.dart';
@@ -25,36 +27,51 @@ class _SearchPageState extends State<SearchPage> {
   List<String> _clinicNames = [];
   List<String> _filteredClinicNames = [];
   bool _showSuggestions = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _setMarkers();
+    _fetchClinicData();
     _getCurrentLocation();
-    _clinicNames = _allMarkers.map((marker) => marker.infoWindow.title!).toList();
   }
 
-  void _setMarkers() {
-    _allMarkers.addAll([
-      Marker(
-        markerId: MarkerId('clinic1'),
-        position: LatLng(45.531563, -122.677433),
-        infoWindow: InfoWindow(
-          title: 'Happy Paws Vet Clinic',
-          snippet: 'Affordable care for your pets',
+  Future<void> _fetchClinicData() async {
+    try {
+      final response = await http.get(Uri.parse('YOUR_API_ENDPOINT_HERE'));
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        setState(() {
+          _setMarkers(data);
+          _clinicNames = _allMarkers.map((marker) => marker.infoWindow.title!).toList();
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load clinic data');
+      }
+    } catch (e) {
+      print('Error fetching clinic data: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _setMarkers(List<dynamic> data) {
+    _allMarkers.clear();
+    data.forEach((clinic) {
+      _allMarkers.add(
+        Marker(
+          markerId: MarkerId(clinic['id'].toString()),
+          position: LatLng(clinic['latitude'], clinic['longitude']),
+          infoWindow: InfoWindow(
+            title: clinic['name'],
+            snippet: clinic['address'],
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-      ),
-      Marker(
-        markerId: MarkerId('clinic2'),
-        position: LatLng(45.511563, -122.667433),
-        infoWindow: InfoWindow(
-          title: 'Healthy Pets Vet Clinic',
-          snippet: 'Best services for your pets',
-        ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      ),
-    ]);
+      );
+    });
     _displayedMarkers = List.from(_allMarkers);
   }
 
@@ -140,7 +157,7 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     mapController.animateCamera(
-      CameraUpdate.newLatLngZoom(selectedMarker.position, 50.0), // Zoom to 50.0
+      CameraUpdate.newLatLngZoom(selectedMarker.position, 14.0), // Zoom to 14.0
     );
 
     // Hide the list of suggestions
@@ -158,7 +175,9 @@ class _SearchPageState extends State<SearchPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
       ),
-      body: Column(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
