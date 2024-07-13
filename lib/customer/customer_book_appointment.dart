@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vetrep/customer/customer_appointment_list.dart';
-import 'package:vetrep/customer/customer_navbar.dart';
-import 'package:vetrep/customer/customer_profile.dart';
-import 'package:vetrep/customer/search.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'customer_home.dart';
+import 'customer_navbar.dart';
+import 'customer_profile.dart';
+import 'search.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,19 +32,25 @@ class Book extends StatefulWidget {
 
 class _BookState extends State<Book> {
   final int currentPageIndex = 2;
+  final _formKey = GlobalKey<FormState>();
+  String _clinicId = '';
+  String _slotId = '';
+  String _userPhoneNo = '';
+  DateTime _selectedDate = DateTime.now();
+  bool _isConfirmed = false;
 
   void onItemTapped(int index) {
     switch (index) {
       case 0:
         Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Home())
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
         );
         break;
       case 1:
         Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SearchPage())
+          context,
+          MaterialPageRoute(builder: (context) => SearchPage()),
         );
         break;
       case 2:
@@ -51,21 +58,63 @@ class _BookState extends State<Book> {
         break;
       case 3:
         Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage())
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage()),
         );
         break;
+    // case 4:
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => ProfilePage())
+    //   );
+    //   break;
     }
   }
 
-  final _formKey = GlobalKey<FormState>();
-  String _name = '';
-  String _day = '';
-  String _month = '';
-  String _year = '';
-  String _gender = 'Male';
-  String _mobile = '';
-  String _email = '';
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      var url = Uri.parse('http://yourlaravelapi.com/api/clinic-bookings'); // Replace with your API URL
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'clinic_id': _clinicId,
+          'slot_id': _slotId,
+          'user_phone_no': _userPhoneNo,
+          'booking_date': _selectedDate.toIso8601String().split('T')[0], // Format: YYYY-MM-DD
+          'is_confirmed': _isConfirmed ? 1 : 0,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        // Successfully stored
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Booking created successfully')),
+        );
+      } else {
+        // Error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to create booking')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +122,7 @@ class _BookState extends State<Book> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('Book Appointment'),
-
+        backgroundColor: Colors.green,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,144 +132,75 @@ class _BookState extends State<Book> {
             children: [
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: "Patient's Name",
+                  labelText: 'Clinic ID',
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _name = value;
-                  });
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Clinic ID';
+                  }
+                  return null;
                 },
-              ),
-              SizedBox(height: 16.0),
-              Text('Age', style: TextStyle(fontWeight: FontWeight.bold)),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(labelText: 'Day'),
-                      items: List.generate(31, (index) => (index + 1).toString())
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _day = newValue!;
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 8.0),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(labelText: 'Month'),
-                      items: List.generate(12, (index) => (index + 1).toString())
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _month = newValue!;
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 8.0),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(labelText: 'Year'),
-                      items: List.generate(3, (index) => (DateTime.now().year + index).toString())
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _year = newValue!;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.0),
-              Text('Gender', style: TextStyle(fontWeight: FontWeight.bold)),
-              Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile(
-                      title: Text('Male'),
-                      value: 'Male',
-                      groupValue: _gender,
-                      onChanged: (value) {
-                        setState(() {
-                          _gender = value.toString();
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile(
-                      title: Text('Female'),
-                      value: 'Female',
-                      groupValue: _gender,
-                      onChanged: (value) {
-                        setState(() {
-                          _gender = value.toString();
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile(
-                      title: Text('Others'),
-                      value: 'Others',
-                      groupValue: _gender,
-                      onChanged: (value) {
-                        setState(() {
-                          _gender = value.toString();
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Mobile Number',
-                ),
                 onChanged: (value) {
                   setState(() {
-                    _mobile = value;
+                    _clinicId = value;
                   });
                 },
               ),
               SizedBox(height: 16.0),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'Slot ID',
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Slot ID';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(() {
-                    _email = value;
+                    _slotId = value;
+                  });
+                },
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'User Phone Number',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter User Phone Number';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  setState(() {
+                    _userPhoneNo = value;
+                  });
+                },
+              ),
+              SizedBox(height: 16.0),
+              ListTile(
+                title: Text("Booking Date: ${_selectedDate.toLocal()}".split(' ')[0]),
+                trailing: Icon(Icons.calendar_today),
+                onTap: () => _selectDate(context),
+              ),
+              SizedBox(height: 16.0),
+              Text("Selected Date: ${_selectedDate.toLocal()}".split(' ')[0], style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 16.0),
+              SwitchListTile(
+                title: Text('Is Confirmed'),
+                value: _isConfirmed,
+                onChanged: (bool value) {
+                  setState(() {
+                    _isConfirmed = value;
                   });
                 },
               ),
               SizedBox(height: 32.0),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Handle form submission
-                  }
-                },
+                onPressed: _submitForm,
                 child: Text('Submit'),
               ),
             ],
