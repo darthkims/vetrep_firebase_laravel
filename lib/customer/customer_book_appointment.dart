@@ -166,11 +166,11 @@ class _BookState extends State<Book> {
               SizedBox(height: 16.0),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'User Phone Number',
+                  labelText: 'Phone Number',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter User Phone Number';
+                    return 'Please enter Phone Number';
                   }
                   return null;
                 },
@@ -186,11 +186,11 @@ class _BookState extends State<Book> {
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _selectDate(context),
               ),
-              SizedBox(height: 16.0),
-              Text("Selected Date: ${_selectedDate.toLocal()}".split(' ')[0], style: TextStyle(fontWeight: FontWeight.bold)),
+              // SizedBox(height: 16.0),
+              // Text("Selected Date: ${_selectedDate.toLocal()}".split(' ')[0], style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 16.0),
               SwitchListTile(
-                title: Text('Is Confirmed'),
+                title: Text('Confirmed'),
                 value: _isConfirmed,
                 onChanged: (bool value) {
                   setState(() {
@@ -201,7 +201,7 @@ class _BookState extends State<Book> {
               SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Submit'),
+                child: Text('Book Now'),
               ),
             ],
           ),
