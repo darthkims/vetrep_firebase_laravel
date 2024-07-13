@@ -20,27 +20,27 @@ class _AddClinicPageState extends State<AddClinicPage> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Use the form values and _selectedLocation to send data to the server
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/v1/secured/admin/clinics'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'name': _nameController.text,
-          'location': _locationController.text,
-          'phone_no': _phoneController.text,
-          'address': _addressController.text,
-          'latitude': _selectedLocation?.latitude,
-          'longitude': _selectedLocation?.longitude,
-        }),
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://192.168.0.6:80/api/v1/secured/admin/clinics'),
       );
 
+      request.fields['name'] = _nameController.text;
+      request.fields['location'] = _locationController.text;
+      request.fields['phone_no'] = _phoneController.text;
+      request.fields['address'] = _addressController.text;
+      if (_selectedLocation != null) {
+        request.fields['latitude'] = _selectedLocation!.latitude.toString();
+        request.fields['longitude'] = _selectedLocation!.longitude.toString();
+      }
+
+      var response = await request.send();
+
       if (response.statusCode == 201) {
-        // Handle successful response
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Clinic added successfully!')),
         );
       } else {
-        // Handle error response
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to add clinic.')),
         );

@@ -48,7 +48,7 @@ class _AdminHomeState extends State<AdminHome> {
                   // For example, navigate to another screen:
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddClinicPage()));
                 },
-                child: Text('Your Button Text'),
+                child: Text('Add Clinic'),
               ),
             ],
           ),
