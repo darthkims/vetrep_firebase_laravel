@@ -101,12 +101,6 @@ class _SearchPageState extends State<SearchPage> {
       case 3:
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CustomerAppointmentList())
-        );
-        break;
-      case 4:
-        Navigator.push(
-            context,
             MaterialPageRoute(builder: (context) => ProfilePage())
         );
         break;

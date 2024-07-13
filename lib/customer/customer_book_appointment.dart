@@ -52,12 +52,6 @@ class _BookState extends State<Book> {
       case 3:
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CustomerAppointmentList())
-        );
-        break;
-      case 4:
-        Navigator.push(
-            context,
             MaterialPageRoute(builder: (context) => ProfilePage())
         );
         break;
