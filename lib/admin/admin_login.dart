@@ -1,8 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../authentication.dart';
+import 'package:http/http.dart' as http;
 import 'admin_home.dart';
+import 'token_manager.dart';
 
 class AdminLogin extends StatelessWidget {
+  static const routeName = '/login';
+
+  const AdminLogin({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,12 +55,10 @@ class AdminLogin extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 class LoginForm extends StatefulWidget {
-  LoginForm({Key? key}) : super(key: key);
+  const LoginForm({super.key});
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -62,11 +66,30 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-
-  String? email;
-  String? password;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   bool _obscureText = true;
+
+  Future<void> _login() async {
+    final response = await http.post(
+      Uri.parse('http://192.168.0.6:80/api/v1/public/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final token = data['token'];
+      await SecureSessionManager.setToken(token);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const AdminHome()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Login Failed')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
         children: <Widget>[
           // email
           TextFormField(
-            // initialValue: 'Input text',
+            controller: _emailController,
             decoration: InputDecoration(
               fillColor: Color(0xff517954),
               filled: true,
@@ -92,18 +115,15 @@ class _LoginFormState extends State<LoginForm> {
             ),
             style: TextStyle(color: Colors.white), // Set the input text color
             validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter email';
+              if (value == null || value.isEmpty) {
+                return 'Please enter your email';
               }
               return null;
-            },
-            onSaved: (val) {
-              email = val;
             },
           ),
           SizedBox(height: 20),
           TextFormField(
-            // initialValue: 'Input text',
+            controller: _passwordController,
             decoration: InputDecoration(
               fillColor: Color(0xff517954),
               filled: true,
@@ -128,12 +148,9 @@ class _LoginFormState extends State<LoginForm> {
             ),
             style: TextStyle(color: Colors.white), // Set the input text color
             obscureText: _obscureText,
-            onSaved: (val) {
-              password = val;
-            },
             validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter password';
+              if (value == null || value.isEmpty) {
+                return 'Please enter your password';
               }
               return null;
             },
@@ -143,7 +160,9 @@ class _LoginFormState extends State<LoginForm> {
 
           ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminHome()));
+              if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                _login();
+              }
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

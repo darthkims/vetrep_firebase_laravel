@@ -19,8 +19,11 @@ class AdminNavbar extends StatelessWidget {
           height: 75,
           destinations: const <Widget> [
             NavigationDestination(
+                icon: Icon(Icons.home),
+                label: "Home"),
+            NavigationDestination(
                 icon: Icon(Icons.link),
-                label: "Link"),
+                label: "Register Clinic"),
             NavigationDestination(
                 icon: Icon(Icons.link),
                 label: "Link"),
