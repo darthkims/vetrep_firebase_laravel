@@ -63,26 +63,6 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "UPCOMING APPOINTMENTS",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerAppointmentList()));
-                          },
-                          child: Text(
-                            "See All",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF586354)),
-                          ),
-                        ),
-                      ],
-                    ),
                     SizedBox(height: 10,),
                     Container(
                       padding: EdgeInsets.all(8),
@@ -98,20 +78,17 @@ class _HomeState extends State<Home> {
                               flex: 2, // Takes 1/3 of the height
                               child: Container(
                                 padding: EdgeInsets.only(left: 10),
-                                child: Text("Dr Arep"),
+                                child: Text("View appointment", style: TextStyle(fontSize: 25),),
                               ),
                             ),
                             VerticalDivider(),
                             Expanded(
                                 flex: 1, // Takes 1/3 of the height
                                 child: Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("12 July 2024"),
-                                      Text("8.00 AM"),
-                                    ],
-                                  ),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerAppointmentList()));},
+                                      icon: Icon(Icons.calendar_month, size: 40,))
                                 )),
                           ],
                         )),
