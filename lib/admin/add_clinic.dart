@@ -3,6 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'token_manager.dart';
+import 'admin_home.dart';
 
 class AddClinicPage extends StatefulWidget {
   @override
@@ -20,10 +22,21 @@ class _AddClinicPageState extends State<AddClinicPage> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
+      String? token = await SecureSessionManager.getToken();
+      if (token == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No token found. Please log in again.')),
+        );
+        return;
+      }
+
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.0.6:80/api/v1/secured/admin/clinics'),
+        Uri.parse('http://192.168.0.7:8080/api/v1/secured/admin/clinics'),
       );
+
+      request.headers['Authorization'] = 'Bearer $token';
+      request.headers['Content-Type'] = 'application/json';
 
       request.fields['name'] = _nameController.text;
       request.fields['location'] = _locationController.text;
@@ -34,15 +47,33 @@ class _AddClinicPageState extends State<AddClinicPage> {
         request.fields['longitude'] = _selectedLocation!.longitude.toString();
       }
 
-      var response = await request.send();
+      try {
+        var response = await request.send();
 
-      if (response.statusCode == 201) {
+        // Log the response for debugging
+        var responseString = await response.stream.bytesToString();
+        print('Response status: ${response.statusCode}');
+        print('Response body: $responseString');
+
+        if (response.statusCode == 201) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Clinic added successfully!')),
+          );
+          // Redirect to admin home page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminHome()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to add clinic.')),
+          );
+        }
+      } catch (e) {
+        // Log any error that occurs during the request
+        print('Error: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Clinic added successfully!')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add clinic.')),
+          SnackBar(content: Text('An error occurred.')),
         );
       }
     }
@@ -68,7 +99,7 @@ class _AddClinicPageState extends State<AddClinicPage> {
       if (placemarks.isNotEmpty) {
         Placemark placemark = placemarks.first;
         String address =
-            '${placemark.street}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.country}';
+            '${placemark.name}, ${placemark.thoroughfare}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.administrativeArea}, ${placemark.country}';
         _addressController.text = address;
       }
     }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vetrep/admin/add_clinic.dart';
 import 'package:vetrep/admin/admin_navbar.dart';
+import 'package:vetrep/admin/admin_view_clinic.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'token_manager.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({Key? key}) : super(key: key);
@@ -11,6 +15,51 @@ class AdminHome extends StatefulWidget {
 
 class _AdminHomeState extends State<AdminHome> {
   final int currentPageIndex = 0;
+  List<dynamic> clinics = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchClinics();
+  }
+
+  Future<void> _fetchClinics() async {
+    String? token = await SecureSessionManager.getToken();
+    if (token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No token found. Please log in again.')),
+      );
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse('http://192.168.0.7:8080/api/v1/secured/admin/all-clinics'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        clinics = json.decode(response.body);
+      });
+    } else {
+      print('Failed to fetch clinics: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to fetch clinics.')),
+      );
+    }
+  }
+
+  void _viewClinic(int id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdminViewClinic(id: id),
+      ),
+    );
+  }
 
   void onItemTapped(int index) {
     switch (index) {
@@ -29,46 +78,46 @@ class _AdminHomeState extends State<AdminHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.network("https://media.tenor.com/YUo9TqxYo0IAAAAM/speed-ishowspeed.gif"),
-              SizedBox(height: 20),
-              Image.network("https://media.tenor.com/t3eKwU-odDgAAAAM/sui-siu.gif"),
-              SizedBox(height: 20),
-              Image.network("https://media4.giphy.com/media/9mlhTFNmxWGkwKvNlL/200w.gif?cid=6c09b952mgb4ecwkx2g1cww11bctnrxas80claemhgtju67j&ep=v1_gifs_search&rid=200w.gif&ct=g"),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Add functionality for the button here
-                  // For example, navigate to another screen:
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddClinicPage()));
-                },
-                child: Text('Add Clinic'),
-              ),
-            ],
-          ),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('All Clinics'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AddClinicPage()));
+              },
+              child: Text('Register New Clinic'),
+            ),
+          ],
         ),
       ),
+      body: clinics.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+        padding: EdgeInsets.all(16),
+        itemCount: clinics.length,
+        itemBuilder: (context, index) {
+          var clinic = clinics[index];
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 8),
+            child: ListTile(
+              title: Text(clinic['name']),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Address: ${clinic['address']}'),
+                  Text('Phone: ${clinic['phone_no']}'),
+                ],
+              ),
+              onTap: () {
+                _viewClinic(clinic['id']);
+              },
+            ),
+          );
+        },
+      ),
       bottomNavigationBar: AdminNavbar(currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
-    );
-  }
-}
-
-class YourNextScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Your Next Screen'),
-      ),
-      body: Center(
-        child: Text('This is your next screen.'),
-      ),
     );
   }
 }
