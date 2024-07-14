@@ -7,7 +7,7 @@ import 'package:vetrep/models/appoinment.dart';
 Future<List<Appointment>> fetchAppointments() async {
 
   String phoneNum = await _fetchPhoneNumber();
-  final response = await http.get(Uri.parse('http://10.82.196.20:80/api/v1/public/clinics/view-bookings/$phoneNum'));
+  final response = await http.get(Uri.parse('http://192.168.0.6:80/api/v1/public/clinics/view-bookings/$phoneNum'));
 
   print(response.body);
   if (response.statusCode == 200) {
