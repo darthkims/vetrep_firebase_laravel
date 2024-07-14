@@ -36,6 +36,9 @@ class _BookState extends State<Book> {
   String _clinicId = '';
   String _slotId = '';
   String _userPhoneNo = '';
+  String _petName = '';
+  String _petGender = '';
+  String _petAge = '';
   DateTime _selectedDate = DateTime.now();
   bool _isConfirmed = false;
 
@@ -87,7 +90,7 @@ class _BookState extends State<Book> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      var url = Uri.parse('http://yourlaravelapi.com/api/clinic-bookings'); // Replace with your API URL
+      var url = Uri.parse('http://192.168.164.1:80/api/v1/public/clinics/book'); // Replace with your API URL
       var response = await http.post(
         url,
         headers: {
@@ -99,6 +102,9 @@ class _BookState extends State<Book> {
           'user_phone_no': _userPhoneNo,
           'booking_date': _selectedDate.toIso8601String().split('T')[0], // Format: YYYY-MM-DD
           'is_confirmed': _isConfirmed ? 1 : 0,
+          'pet_name': _petName,
+          'pet_gender': _petGender,
+          'pet_age': _petAge,
         }),
       );
 
@@ -181,13 +187,77 @@ class _BookState extends State<Book> {
                 },
               ),
               SizedBox(height: 16.0),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Pet Name',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Pet Name';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  setState(() {
+                    _petName = value;
+                  });
+                },
+              ),
+              SizedBox(height: 16.0),
+              Text('Pet Gender'),
+              RadioListTile<String>(
+                title: const Text('Male'),
+                value: 'Male',
+                groupValue: _petGender,
+                onChanged: (value) {
+                  setState(() {
+                    _petGender = value!;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('Female'),
+                value: 'Female',
+                groupValue: _petGender,
+                onChanged: (value) {
+                  setState(() {
+                    _petGender = value!;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('Other'),
+                value: 'Other',
+                groupValue: _petGender,
+                onChanged: (value) {
+                  setState(() {
+                    _petGender = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Pet Age',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter Pet Age';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  setState(() {
+                    _petAge = value;
+                  });
+                },
+              ),
+              SizedBox(height: 16.0),
               ListTile(
                 title: Text("Booking Date: ${_selectedDate.toLocal()}".split(' ')[0]),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _selectDate(context),
               ),
-              // SizedBox(height: 16.0),
-              // Text("Selected Date: ${_selectedDate.toLocal()}".split(' ')[0], style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 16.0),
               SwitchListTile(
                 title: Text('Confirmed'),
