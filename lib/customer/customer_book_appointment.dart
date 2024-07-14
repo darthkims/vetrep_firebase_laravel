@@ -108,11 +108,17 @@ class _BookState extends State<Book> {
         }),
       );
 
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 201) {
         // Successfully stored
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Booking created successfully')),
         );
+        setState(() {
+          _isConfirmed = true; // Update the switch state
+        });
       } else {
         // Error
         ScaffoldMessenger.of(context).showSnackBar(
@@ -139,6 +145,18 @@ class _BookState extends State<Book> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Clinic ID',
+                  labelStyle: TextStyle(color: Colors.black87),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.black87),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -156,6 +174,18 @@ class _BookState extends State<Book> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Slot ID',
+                  labelStyle: TextStyle(color: Colors.black87),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.black87),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -173,6 +203,18 @@ class _BookState extends State<Book> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
+                  labelStyle: TextStyle(color: Colors.black87),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.black87),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -190,6 +232,18 @@ class _BookState extends State<Book> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Pet Name',
+                  labelStyle: TextStyle(color: Colors.black87),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.black87),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -214,6 +268,7 @@ class _BookState extends State<Book> {
                     _petGender = value!;
                   });
                 },
+                activeColor: Colors.green,
               ),
               RadioListTile<String>(
                 title: const Text('Female'),
@@ -224,6 +279,7 @@ class _BookState extends State<Book> {
                     _petGender = value!;
                   });
                 },
+                activeColor: Colors.green,
               ),
               RadioListTile<String>(
                 title: const Text('Other'),
@@ -234,11 +290,24 @@ class _BookState extends State<Book> {
                     _petGender = value!;
                   });
                 },
+                activeColor: Colors.green,
               ),
               SizedBox(height: 16.0),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Pet Age',
+                  labelStyle: TextStyle(color: Colors.black87),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.black87),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(color: Colors.green),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -262,6 +331,7 @@ class _BookState extends State<Book> {
               SwitchListTile(
                 title: Text('Confirmed'),
                 value: _isConfirmed,
+                activeColor: Colors.green,
                 onChanged: (bool value) {
                   setState(() {
                     _isConfirmed = value;
@@ -271,7 +341,16 @@ class _BookState extends State<Book> {
               SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Book Now'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Background color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Set the border radius
+                  ),
+                ),
+                child: Text(
+                  'Book Now',
+                  style: TextStyle(color: Colors.black45), // Text color
+                ),
               ),
             ],
           ),
