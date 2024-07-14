@@ -9,6 +9,7 @@ Future<List<Appointment>> fetchAppointments() async {
   String phoneNum = await _fetchPhoneNumber();
   final response = await http.get(Uri.parse('http://10.82.196.20:80/api/v1/public/clinics/view-bookings/$phoneNum'));
 
+  print(response.body);
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
     return jsonResponse.map((appointment) => Appointment.fromJson(appointment)).toList();

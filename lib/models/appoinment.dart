@@ -1,17 +1,39 @@
 import 'package:intl/intl.dart';
 
+class Clinic {
+  final int id;
+  final String name;
+  final String location;
+  final String phoneNum;
+  final String address;
+
+  Clinic({required this.id, required this.name, required this.location, required this.phoneNum, required this.address});
+
+  factory Clinic.fromJson(Map<String, dynamic> json) {
+    return Clinic(
+      id: json['id'],
+      name: (json['name']),
+      location: json['location'],
+      phoneNum: json['phone_no'],
+      address: json['address'],
+    );
+  }
+}
+
 class TimeSlot {
   final int id;
   final int clinicId;
-  final DateTime time;
+  final String time;
+  final Clinic clinic;
 
-  TimeSlot({required this.id, required this.clinicId, required this.time});
+  TimeSlot({required this.id, required this.clinicId, required this.time, required this.clinic});
 
   factory TimeSlot.fromJson(Map<String, dynamic> json) {
     return TimeSlot(
       id: json['id'],
       clinicId: (json['clinic_id']),
-      time: DateTime.parse(json['time']),
+      time: json['time'],
+      clinic: Clinic.fromJson(json['clinic']),
     );
   }
 }
@@ -60,8 +82,4 @@ class Appointment {
     return DateFormat('d MMMM yyyy').format(bookingDate);
   }
 
-  String getFormattedTime() {
-    DateTime time = DateTime.parse('2024-07-14 00:00:04');
-    return DateFormat('hh:mm aa').format(time);
-  }
 }

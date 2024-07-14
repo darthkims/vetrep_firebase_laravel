@@ -62,33 +62,45 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                       showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context){
-                            return Container(
-                              padding: EdgeInsets.all(10),
-                              width: double.infinity,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ListTile(
-                                    title: Center(
-                                        child: Text(
-                                          'Pet Details',
-                                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                                        )
+                            return SingleChildScrollView(
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTile(
+                                      title: Center(
+                                          child: Text(
+                                            'Pet Details',
+                                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                                          )
+                                      ),
                                     ),
-                                  ),
-                                  Divider(),
-                                  Text("Name:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                  Text("${appointment.petName}", style: TextStyle(fontSize: 25),),
-                                  SizedBox(height: 10),
-                                  Text("Gender:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                  Text("${appointment.petGender}", style: TextStyle(fontSize: 25),),
-                                  SizedBox(height: 10),
-                                  Text("Age:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                  Text("${appointment.petAge}", style: TextStyle(fontSize: 25),),
-                                  SizedBox(height: 10),
-                                  // Add more content here as needed
-                                ],
+                                    Divider(),
+                                    Text("Name:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.petName}", style: TextStyle(fontSize: 25),),
+                                    SizedBox(height: 10),
+                                    Text("Gender:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.petGender}", style: TextStyle(fontSize: 25),),
+                                    SizedBox(height: 10),
+                                    Text("Age:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.petAge}", style: TextStyle(fontSize: 25),),
+                                    Text("Booking date:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.bookingDate}", style: TextStyle(fontSize: 25),),
+                                    Text("Time:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.timeslot.time}", style: TextStyle(fontSize: 25),),
+                                    Text("Clinic Name:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.timeslot.clinic.name}", style: TextStyle(fontSize: 25),),
+                                    Text("Location:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.timeslot.clinic.address}", style: TextStyle(fontSize: 25),),
+                                    Text("Reference:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                    Text("${appointment.ref}", style: TextStyle(fontSize: 25),),
+                                    SizedBox(height: 10),
+                                    // Add more content here as needed
+                                  ],
+                                ),
                               ),
                             );
                           });
@@ -118,7 +130,7 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${appointment.getFormattedBookingDate()}, ${appointment.getFormattedTime()}",
+                                  "${appointment.getFormattedBookingDate()}, ${appointment.timeslot.time}",
                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),
                                 ),
                                 SizedBox(height: 5),
@@ -132,32 +144,13 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                                 ),
                                 SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    Text(
-                                      appointment.phoneNum,
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                                    ),
-                                    SizedBox(width: 10,),
-                                  ],
+                                Text(
+                                  "Clinic: ${appointment.timeslot.clinic.name}",
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.grey),
                                 ),
+                                SizedBox(width: 10,),
                                 SizedBox(height: 5),
                               ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 10,
-                            right: 10,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(
-                                appointment.phoneNum,
-                                style: TextStyle(color: Colors.white),
-                              ),
                             ),
                           ),
                           Positioned(
