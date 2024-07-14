@@ -53,16 +53,6 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                                     title: Text('Reschedule'),
                                   )
                               ),
-                              SimpleDialogOption(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    // Handle delete
-                                  },
-                                  child: ListTile(
-                                    leading: Icon(Icons.delete),
-                                    title: Text('Delete'),
-                                  )
-                              ),
                             ],
                           );
                         },
@@ -89,7 +79,13 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                                   ),
                                   Divider(),
                                   Text("Name:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                  Text(appointment.slotId as String, style: TextStyle(fontSize: 25),),
+                                  Text("${appointment.petName}", style: TextStyle(fontSize: 25),),
+                                  SizedBox(height: 10),
+                                  Text("Gender:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                  Text("${appointment.petGender}", style: TextStyle(fontSize: 25),),
+                                  SizedBox(height: 10),
+                                  Text("Age:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                  Text("${appointment.petAge}", style: TextStyle(fontSize: 25),),
                                   SizedBox(height: 10),
                                   // Add more content here as needed
                                 ],
@@ -98,7 +94,7 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                           });
                     },
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 10),
+                      margin: EdgeInsets.only(bottom: 15),
                       width: double.infinity,
                       height: 200,
                       decoration: BoxDecoration(
@@ -122,17 +118,17 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  appointment.phoneNum as String,
+                                  "${appointment.getFormattedBookingDate()}, ${appointment.getFormattedTime()}",
                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black54),
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  'Name: ${appointment.ref}',
+                                  'Name: ${appointment.petName}',
                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  'Age: ${appointment.timeStamp}',
+                                  'Age: ${appointment.petAge}',
                                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                                 ),
                                 SizedBox(height: 5),
@@ -143,23 +139,6 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                     ),
                                     SizedBox(width: 10,),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            final scaffoldMessenger = ScaffoldMessenger.of(context);
-                                            scaffoldMessenger.showSnackBar(
-                                              const SnackBar(
-                                                content: Text('Location Clicked'),
-                                              ),
-                                            );
-                                          },
-                                          icon: Icon(Icons.location_on)
-                                      ),
-                                    )
                                   ],
                                 ),
                                 SizedBox(height: 5),
@@ -185,9 +164,9 @@ class _CustomerAppointmentListState extends State<CustomerAppointmentList> {
                             top: 60,
                             right: 30,
                             child: Icon(
-                              Icons.male,
+                              appointment.petGender == 'male' ? Icons.male : Icons.female,
                               size: 60,
-                              color: Colors.blue,
+                              color: appointment.petGender == 'male' ? Colors.blue : Colors.pink,
                             ),
                           ),
                         ],

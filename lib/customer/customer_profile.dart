@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vetrep/authentication.dart';
 import 'package:vetrep/customer/customer_appointment_list.dart';
 import 'package:vetrep/customer/customer_book_appointment.dart';
 import 'package:vetrep/customer/customer_home.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
 import 'package:vetrep/customer/search.dart';
+import 'package:vetrep/splash.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -49,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
     User? user = FirebaseAuth.instance.currentUser;
     String displayName = user?.displayName ?? 'User';
     String email = user?.email ?? 'Email';
+    AuthenticationHelper auth = AuthenticationHelper();
 
     return Scaffold(
       appBar: AppBar(
@@ -70,6 +73,22 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             ),
             const Divider(), // Add a divider between menu items
+            TextButton(
+                onPressed: () async {
+                  await auth.signOut();
+                  Navigator.of(context).popUntil((route) =>
+                  route.isFirst); // Pop until first route
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SplashScreen()),
+                        (
+                        route) => false, // Remove all existing routes
+                  );
+                  print("Signed out");
+                },
+                child: const Text("Log Out")
+            ),
           ],
         ),
       ),
