@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> _fetchClinicData() async {
     try {
-      final response = await http.get(Uri.parse('YOUR_API_ENDPOINT_HERE'));
+      final response = await http.get(Uri.parse('http://192.168.0.6:80/api/v1/public/clinics'));
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         List<Locations> locations = data.map((json) => Locations.fromJson(json)).toList();

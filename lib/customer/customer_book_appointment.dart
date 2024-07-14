@@ -41,6 +41,7 @@ class _BookState extends State<Book> {
   String _petAge = '';
   DateTime _selectedDate = DateTime.now();
   bool _isConfirmed = false;
+  List<Map<String, dynamic>> availableTimeslots = [];
 
   void onItemTapped(int index) {
     switch (index) {
@@ -85,6 +86,35 @@ class _BookState extends State<Book> {
       setState(() {
         _selectedDate = picked;
       });
+      availableTimeslots = await _fetchAvailableTimeslots(picked);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchAvailableTimeslots(DateTime date) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://192.168.0.6:80/api/v1/public/clinics/availability?clinic_id=$_clinicId&year=${date.year}&month=${date.month}&day=${date.day}'),
+      );
+
+      print('response timeslots: ${response.body}');
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        return List<Map<String, dynamic>>.from(data['${date.toIso8601String().substring(0, 10)}']);
+      } else {
+        print('Failed to fetch timeslots: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to fetch timeslots: ${response.body}')),
+        );
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching timeslots: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching timeslots: $e')),
+      );
+      return [];
     }
   }
 
@@ -327,6 +357,20 @@ class _BookState extends State<Book> {
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _selectDate(context),
               ),
+              SizedBox(height: 16.0),
+              if (availableTimeslots.isNotEmpty) ...[
+                Text('Select Timeslot'),
+                for (var timeslot in availableTimeslots)
+                  ListTile(
+                    title: Text('${timeslot['time']}'),
+                    trailing: Icon(_slotId == timeslot['id'] ? Icons.check_box : Icons.check_box_outline_blank),
+                    onTap: () {
+                      setState(() {
+                        _slotId = timeslot['id'];
+                      });
+                    },
+                  ),
+              ],
               SizedBox(height: 16.0),
               SwitchListTile(
                 title: Text('Confirmed'),

@@ -7,16 +7,15 @@ class Locations {
   final String latitude;
   final String longitude;
 
-
-  Locations(
-      {required this.clinicId,
-        required this.name,
-        required this.location,
-        required this.phoneNum,
-        required this.address,
-        required this.latitude,
-        required this.longitude,
-      });
+  Locations({
+    required this.clinicId,
+    required this.name,
+    required this.location,
+    required this.phoneNum,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
+  });
 
   factory Locations.fromJson(Map<String, dynamic> json) {
     return Locations(

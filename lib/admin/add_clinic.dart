@@ -32,7 +32,7 @@ class _AddClinicPageState extends State<AddClinicPage> {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.0.7:8080/api/v1/secured/admin/clinics'),
+        Uri.parse('http://192.168.0.6:80/api/v1/secured/admin/clinics'),
       );
 
       request.headers['Authorization'] = 'Bearer $token';

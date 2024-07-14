@@ -67,7 +67,7 @@ class _AdminViewClinicState extends State<AdminViewClinic> {
     }
 
     final response = await http.get(
-      Uri.parse('http://192.168.0.7:8080/api/v1/secured/admin/bookings/${widget.id}'),
+      Uri.parse('http://192.168.0.6:80/api/v1/secured/admin/bookings/${widget.id}'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -151,7 +151,7 @@ class _AdminViewClinicState extends State<AdminViewClinic> {
                 }
 
                 final response = await http.put(
-                  Uri.parse('http://192.168.0.7:8080/api/v1/secured/admin/clinics/${widget.id}'),
+                  Uri.parse('http://192.168.0.6:80/api/v1/secured/admin/clinics/${widget.id}'),
                   headers: {
                     'Authorization': 'Bearer $token',
                     'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ class _AdminViewClinicState extends State<AdminViewClinic> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.0.7:8080/api/v1/public/clinics/availability?clinic_id=${widget.id}&year=${date.year}&month=${date.month}&day=${date.day}'),
+        Uri.parse('http://192.168.0.6:80/api/v1/public/clinics/availability?clinic_id=${widget.id}&year=${date.year}&month=${date.month}&day=${date.day}'),
         headers: {
           'Authorization': 'Bearer $token',
         },
