@@ -61,20 +61,6 @@ class _AdminHomeState extends State<AdminHome> {
     );
   }
 
-  void onItemTapped(int index) {
-    switch (index) {
-      case 0:
-      // Handle navigation or action for item 0
-        break;
-      case 1:
-      // Handle navigation or action for item 1
-        break;
-      case 2:
-      // Handle navigation or action for item 2
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,6 +77,7 @@ class _AdminHomeState extends State<AdminHome> {
             ),
           ],
         ),
+        automaticallyImplyLeading: false,
       ),
       body: clinics.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -117,7 +104,6 @@ class _AdminHomeState extends State<AdminHome> {
           );
         },
       ),
-      bottomNavigationBar: AdminNavbar(currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
     );
   }
 }

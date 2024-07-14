@@ -80,7 +80,7 @@ class _BookState extends State<Book> {
   Future<void> _fetchClinics() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.0.7:8080/api/v1/public/clinics'),
+        Uri.parse('http://192.168.0.6:80/api/v1/public/clinics'),
       );
 
       if (response.statusCode == 200) {
@@ -116,7 +116,7 @@ class _BookState extends State<Book> {
   Future<List<Map<String, dynamic>>> _fetchAvailableTimeslots(DateTime date) async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.0.7:8080/api/v1/public/clinics/availability?clinic_id=$_clinicId&year=${date.year}&month=${date.month}&day=${date.day}'),
+        Uri.parse('http://192.168.0.6:80/api/v1/public/clinics/availability?clinic_id=$_clinicId&year=${date.year}&month=${date.month}&day=${date.day}'),
       );
 
       if (response.statusCode == 200) {
@@ -134,7 +134,7 @@ class _BookState extends State<Book> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      var url = Uri.parse('http://192.168.0.7:8080/api/v1/public/clinics/book'); // Replace with your API URL
+      var url = Uri.parse('http://192.168.0.6:80/api/v1/public/clinics/book'); // Replace with your API URL
       var response = await http.post(
         url,
         headers: {

@@ -332,7 +332,7 @@ class _AdminViewClinicState extends State<AdminViewClinic> {
                 }
 
                 final response = await http.put(
-                  Uri.parse('http://192.168.0.7:8080/api/v1/secured/admin/bookings/${booking['id']}'),
+                  Uri.parse('http://192.168.0.6:80/api/v1/secured/admin/bookings/${booking['id']}'),
                   headers: {
                     'Authorization': 'Bearer $token',
                     'Content-Type': 'application/json',
