@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
-import 'package:vetrep/customer/customer_appointment_list.dart';
+import 'package:vetrep/customer/customer_book_appointment.dart';
+import 'package:vetrep/customer/customer_home.dart';
 import 'package:vetrep/customer/customer_navbar.dart';
-import 'customer_book_appointment.dart';
-import 'customer_home.dart';
-import 'customer_profile.dart';
+import 'package:vetrep/customer/customer_profile.dart';
+import 'package:vetrep/models/location.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -41,8 +41,9 @@ class _SearchPageState extends State<SearchPage> {
       final response = await http.get(Uri.parse('YOUR_API_ENDPOINT_HERE'));
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
+        List<Locations> locations = data.map((json) => Locations.fromJson(json)).toList();
         setState(() {
-          _setMarkers(data);
+          _setMarkers(locations);
           _clinicNames = _allMarkers.map((marker) => marker.infoWindow.title!).toList();
           _isLoading = false;
         });
@@ -57,16 +58,16 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-  void _setMarkers(List<dynamic> data) {
+  void _setMarkers(List<Locations> data) {
     _allMarkers.clear();
     data.forEach((clinic) {
       _allMarkers.add(
         Marker(
-          markerId: MarkerId(clinic['id'].toString()),
-          position: LatLng(clinic['latitude'], clinic['longitude']),
+          markerId: MarkerId(clinic.clinicId.toString()),
+          position: LatLng(double.parse(clinic.latitude), double.parse(clinic.longitude)),
           infoWindow: InfoWindow(
-            title: clinic['name'],
-            snippet: clinic['address'],
+            title: clinic.name,
+            snippet: clinic.address,
           ),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
@@ -80,7 +81,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void _getCurrentLocation() async {
-    Location location = new Location();
+    Location location = Location();
     LocationData currentLocation = await location.getLocation();
     setState(() {
       _currentLocation = LatLng(currentLocation.latitude!, currentLocation.longitude!);
@@ -104,22 +105,15 @@ class _SearchPageState extends State<SearchPage> {
   void onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Home())
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
         break;
       case 1:
         break;
       case 2:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Book()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Book()));
         break;
       case 3:
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage())
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
         break;
     }
   }
@@ -134,10 +128,7 @@ class _SearchPageState extends State<SearchPage> {
     List<String> filteredNames = [];
 
     if (query.isNotEmpty) {
-      filteredNames = _clinicNames
-          .where((name) =>
-          name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      filteredNames = _clinicNames.where((name) => name.toLowerCase().contains(query.toLowerCase())).toList();
       setState(() {
         _filteredClinicNames = filteredNames;
         _showSuggestions = true;
@@ -157,13 +148,12 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     mapController.animateCamera(
-      CameraUpdate.newLatLngZoom(selectedMarker.position, 14.0), // Zoom to 14.0
+      CameraUpdate.newLatLngZoom(selectedMarker.position, 14.0),
     );
 
-    // Hide the list of suggestions
     setState(() {
       _showSuggestions = false;
-      _searchController.clear(); // Optionally clear the search input
+      _searchController.clear();
     });
   }
 
@@ -231,8 +221,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Icon(Icons.my_location),
         backgroundColor: Colors.green,
       ),
-      bottomNavigationBar: Navbar(
-          currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
+      bottomNavigationBar: Navbar(currentPageIndex: currentPageIndex, onItemTapped: onItemTapped),
     );
   }
 }
